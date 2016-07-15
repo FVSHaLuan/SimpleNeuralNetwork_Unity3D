@@ -1,15 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SNN.Core;
 
-public class Test : MonoBehaviour {
+namespace SNN.Test
+{
+    public class Test : MonoBehaviour
+    {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+        // Use this for initialization
+        void Start()
+        {
+           
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+    }
+
 }
