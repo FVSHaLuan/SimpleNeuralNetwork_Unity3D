@@ -35,10 +35,18 @@ namespace SNN.Test
         [ContextMenu("Randomize input")]
         void RandomizeInput()
         {
+            input = new float[neuralNet.InputSize];
             for (int i = 0; i < input.Length; i++)
             {
                 input[i] = Random.Range(0.0f, 1.0f);
             }
+        }
+
+        [ContextMenu("RandomizeInputThenCompute")]
+        void RandomizeInputThenCompute()
+        {
+            RandomizeInput();
+            Compute();
         }
     }
 }
