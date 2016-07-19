@@ -13,7 +13,7 @@ namespace SNN.Core
         [SerializeField, HideInInspector]
         int nodeSize;
 
-        Sigmoid GetNode(int nodeIndex)
+        public Sigmoid GetNode(int nodeIndex)
         {
             return nodes[nodeIndex];
         }
