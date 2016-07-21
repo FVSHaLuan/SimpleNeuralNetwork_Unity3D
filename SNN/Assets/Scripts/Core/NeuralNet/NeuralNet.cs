@@ -5,24 +5,19 @@ using System;
 namespace SNN.Core
 {
     [CreateAssetMenu]
-    public class NeuralNet : ScriptableObject, ITrainableNeuralNet
+    public partial class NeuralNet : ScriptableObject, ITrainableNeuralNet
     {
+        [SerializeField, HideInInspector]
+        NeuralNetAccessor neuralNetAccessor;
         [SerializeField, HideInInspector]
         int inputSize;
         [SerializeField, HideInInspector]
         int outputSize;
         [SerializeField, HideInInspector]
-        NeuralLayer[] neuralLayers;
-        [SerializeField, HideInInspector]
         bool initialized = false;
 
         [SerializeField, Multiline]
         string description;
-
-        [NonSerialized]
-        BiasAccessor biasAccessor = null;
-        [NonSerialized]
-        WeightAccessor weightAccessor = null;
 
         public bool Initialized
         {
@@ -46,13 +41,8 @@ namespace SNN.Core
 
             inputSize = layersNodes[0];
             outputSize = layersNodes[layersNodes.Length - 1];
-            neuralLayers = new NeuralLayer[layersNodes.Length - 1];
-            int currentNumberOfWeights = inputSize;
-            for (int i = 0; i < neuralLayers.Length; i++)
-            {
-                neuralLayers[i] = new NeuralLayer(currentNumberOfWeights, layersNodes[i + 1]);
-                currentNumberOfWeights = layersNodes[i + 1];
-            }
+
+            neuralNetAccessor = new NeuralNetAccessor(layersNodes);
 
             initialized = true;
         }
@@ -71,7 +61,7 @@ namespace SNN.Core
             {
                 return outputSize;
             }
-        }       
+        }
         public float[] Compute(float[] input)
         {
             if (!initialized)
@@ -79,43 +69,11 @@ namespace SNN.Core
                 throw new System.InvalidOperationException();
             }
 
-            float[] currentResult = input;
-            for (int i = 0; i < neuralLayers.Length; i++)
-            {
-                currentResult = neuralLayers[i].Compute(currentResult);
-            }
-            return currentResult;
+            return neuralNetAccessor.Compute(input);
         }
-        #endregion
-
-        #region ITrainableNeuralNet
-        public BiasAccessor BiasAccessor
+        public void Compute(float[] input, float[] output)
         {
-            get
-            {
-                if (biasAccessor == null)
-                {
-                    biasAccessor = new BiasAccessor(neuralLayers);
-                }
-                return biasAccessor;
-            }
-        }
-
-        public WeightAccessor WeightAccessor
-        {
-            get
-            {
-                if (weightAccessor == null)
-                {
-                    weightAccessor = new WeightAccessor(neuralLayers);
-                }
-                return weightAccessor;
-            }
-        }
-
-        public void Learn(LearningExample[] learningExample, float learningRate)
-        {
-            throw new System.NotImplementedException();
+            neuralNetAccessor.Compute(input, output);
         }
         #endregion
     }

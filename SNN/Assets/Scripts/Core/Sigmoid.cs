@@ -55,8 +55,16 @@ namespace SNN.Core
             {
                 throw new System.ArgumentException();
             }
-            Debug.Log(System.Math.Exp(-WeightedSum(input) - Bias));
-            return 1.0f / (1.0f + (float)System.Math.Exp(-WeightedSum(input) - Bias));
+            return 1.0f / (1.0f + (float)System.Math.Exp(-GetWeightedInput(input)));
+        }
+        public float Compute(float weightedInput)
+        {
+            return 1.0f / (1.0f + (float)System.Math.Exp(-weightedInput));
+        }
+
+        public float GetWeightedInput(float[] input)
+        {
+            return WeightedSum(input) + Bias;
         }
 
         float WeightedSum(float[] input)

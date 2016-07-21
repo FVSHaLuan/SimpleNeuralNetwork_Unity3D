@@ -13,6 +13,14 @@ namespace SNN.Core
         [SerializeField, HideInInspector]
         int nodeSize;
 
+        public int NodeSize
+        {
+            get
+            {
+                return nodeSize;
+            }
+        }
+
         public Sigmoid GetNode(int nodeIndex)
         {
             return nodes[nodeIndex];
@@ -32,19 +40,35 @@ namespace SNN.Core
                 throw new System.ArgumentException();
             }
 
-            float[] output = new float[nodeSize];
+            float[] output = new float[NodeSize];
             Compute(input, output);
             return output;
         }
 
+        public void ComputeWithWeightedInputs(float[] weightedInput, float[] activations)
+        {
+            for (int i = 0; i < NodeSize; i++)
+            {
+                activations[i] = nodes[i].Compute(weightedInput[i]);
+            }
+        }
+
+        public void GetWeightedInputs(float[] input,float[] weightedInput)
+        {
+            for (int i = 0; i < weightedInput.Length; i++)
+            {
+                weightedInput[i] = nodes[i].GetWeightedInput(input);
+            }
+        }
+
         public void Compute(float[] input, float[] output)
         {
-            if (output.Length != nodeSize)
+            if (output.Length != NodeSize)
             {
                 throw new System.ArgumentException();
             }
 
-            for (int i = 0; i < nodeSize; i++)
+            for (int i = 0; i < NodeSize; i++)
             {
                 output[i] = nodes[i].Compute(input);
             }

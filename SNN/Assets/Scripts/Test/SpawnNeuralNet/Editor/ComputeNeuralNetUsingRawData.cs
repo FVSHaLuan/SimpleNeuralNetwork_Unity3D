@@ -16,7 +16,7 @@ namespace SNN.Test
         [SerializeField]
         float[] output;
 
-        [MenuItem("Test/Compute/Using raw data...")]
+        [MenuItem("SNN/Compute/Using raw data...")]
         public static void MenuItem()
         {
             if (current == null)

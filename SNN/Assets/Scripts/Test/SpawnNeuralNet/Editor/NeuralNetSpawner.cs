@@ -8,13 +8,13 @@ namespace SNN.Test
     public class NeuralNetSpawner : ScriptableObject
     {
         [SerializeField]
-        int[] layersNodes = new int[2] { 2, 2 };
+        int[] layersNodes = new int[3] { 2, 2, 2 };
         [SerializeField]
         Object path;
 
         static NeuralNetSpawner current;
 
-        [MenuItem("Test/Spawn NeuralNet...")]
+        [MenuItem("SNN/Spawn NeuralNet...")]
         public static void MenuItem()
         {
             if (current == null)

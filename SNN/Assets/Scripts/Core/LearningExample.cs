@@ -36,6 +36,12 @@ namespace SNN.Core
                 output = value;
             }
         }
+
+        public LearningExample(int inputSize, int outputSize)
+        {
+            input = new float[inputSize];
+            output = new float[outputSize];
+        }
     }
 
 }
