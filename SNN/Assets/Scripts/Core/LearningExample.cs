@@ -7,6 +7,8 @@ namespace SNN.Core
     public class LearningExample
     {
         [SerializeField]
+        string label;
+        [SerializeField]
         float[] input;
         [SerializeField]
         float[] output;

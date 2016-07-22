@@ -6,7 +6,7 @@ namespace SNN.Core
     [System.Serializable]
     public class NeuralLayer
     {
-        [SerializeField, HideInInspector]
+        [SerializeField]
         Sigmoid[] nodes;
         [SerializeField, HideInInspector]
         int inputSize;

@@ -7,7 +7,7 @@ namespace SNN.Core
     [CreateAssetMenu]
     public partial class NeuralNet : ScriptableObject, ITrainableNeuralNet
     {
-        [SerializeField, HideInInspector]
+        [SerializeField]
         NeuralNetAccessor neuralNetAccessor;
         [SerializeField, HideInInspector]
         int inputSize;

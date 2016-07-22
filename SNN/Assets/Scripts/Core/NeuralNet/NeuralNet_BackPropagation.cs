@@ -6,7 +6,7 @@ namespace SNN.Core
 {
     public partial class NeuralNet
     {
-        const float smallDelta = 0.001f;
+        const float smallDelta = 0.1f;
 
         [System.NonSerialized]
         bool initializedBackpropagation = false;
@@ -122,7 +122,7 @@ namespace SNN.Core
             weightedInputs = new List<float[]>(neuralNetAccessor.NumberOfLayer);
             for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
             {
-                weightedInputs.Add(new float[neuralNetAccessor.WeightsOfNodeInLayer(i)]);
+                weightedInputs.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
             }
 
             // Initialize activations

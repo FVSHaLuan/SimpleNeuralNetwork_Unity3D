@@ -8,9 +8,9 @@ namespace SNN.Core
     {
         [SerializeField, HideInInspector]
         int numberOfWeights;
-        [SerializeField, HideInInspector]
+        [SerializeField]
         float[] weights;
-        [SerializeField, HideInInspector]
+        [SerializeField]
         float bias;
 
         public float Bias
@@ -55,11 +55,11 @@ namespace SNN.Core
             {
                 throw new System.ArgumentException();
             }
-            return 1.0f / (1.0f + (float)System.Math.Exp(-GetWeightedInput(input)));
+            return Compute(GetWeightedInput(input));
         }
         public float Compute(float weightedInput)
         {
-            return 1.0f / (1.0f + (float)System.Math.Exp(-weightedInput));
+            return 1.0f / (1.0f + Mathf.Exp(-weightedInput));
         }
 
         public float GetWeightedInput(float[] input)

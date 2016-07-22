@@ -10,7 +10,7 @@ namespace SNN.Core
         [SerializeField]
         int[] initializedParameters;
 
-        [SerializeField, HideInInspector]
+        [SerializeField]
         NeuralLayer[] neuralLayers;
 
         [NonSerialized]
