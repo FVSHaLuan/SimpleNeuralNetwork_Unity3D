@@ -27,7 +27,7 @@ namespace SNN.Core
             }
         }
 
-        public void Initialize(params int[] layersNodes)
+        public void Initialize(CostFuntionKind costFunction, params int[] layersNodes)
         {
             if (initialized)
             {
@@ -44,6 +44,11 @@ namespace SNN.Core
 
             neuralNetAccessor = new NeuralNetAccessor(layersNodes);
 
+            // Back propagation
+            this.costFunction = costFunction;
+            InitializeBackPropagation();
+
+            //
             initialized = true;
         }
 

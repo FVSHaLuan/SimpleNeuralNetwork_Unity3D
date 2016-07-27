@@ -48,7 +48,7 @@ namespace SNN.Core
 
             for (int i = 0; i < learningExample.Length; i++)
             {
-                BackPropagation(learningExample[i], backPropagationOutput);
+                backPropagation.BackPropagate(learningExample[i], backPropagationOutput);
                 costFunctionGradient.AddAllBiasesAndWeightsWith(backPropagationOutput);
             }
 

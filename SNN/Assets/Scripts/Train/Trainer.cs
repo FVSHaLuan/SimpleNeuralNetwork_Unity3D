@@ -26,25 +26,7 @@ namespace SNN.Train
         [SerializeField]
         float[] computedOutput;
 
-        float SingleCost(float[] expectedOutput, float[] realOutput)
-        {
-            float singleCost = 0;
-            for (int i = 0; i < expectedOutput.Length; i++)
-            {
-                singleCost += Mathf.Pow(expectedOutput[i] - realOutput[i], 2);
-            }
-            return singleCost / 2.0f;
-        }
 
-        float WholeCost(LearningExample[] learningExamples)
-        {
-            float wholeCost = 0;
-            for (int i = 0; i < learningExamples.Length; i++)
-            {
-                wholeCost += SingleCost(learningExamples[i].Output, neuralNet.Compute(learningExamples[i].Input));
-            }
-            return wholeCost / learningExamples.Length;
-        }
 
         [ContextMenu("InitializeLearningExample")]
         void InitializeLearningExample()
@@ -67,7 +49,7 @@ namespace SNN.Train
         [ContextMenu("ComputeCost")]
         void ComputeCost()
         {
-            Debug.Log(string.Format("Trainer {0}, cost = {1}", name, WholeCost(learningExamples)));
+            Debug.Log(string.Format("Trainer {0}, cost = {1}", name, CostHelper.ComputeCost(neuralNet, learningExamples)));
         }
 
         [ContextMenu("Train")]

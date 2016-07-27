@@ -10,9 +10,10 @@ namespace SNN.Core
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            if ((target as NeuralNet).Initialized)
+            NeuralNet neuralNet = target as NeuralNet;
+            if (neuralNet.Initialized)
             {
-                EditorGUILayout.HelpBox(string.Format("InputSize: {0}", (target as NeuralNet).InputSize), MessageType.Info, true);
+                EditorGUILayout.HelpBox(string.Format("InputSize: {0}\nCost funtion: {1}", neuralNet.InputSize, neuralNet.CostFunction), MessageType.Info, true);
             }
             else
             {
