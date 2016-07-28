@@ -5,11 +5,8 @@ using System.Collections.Generic;
 
 namespace SNN.Core
 {
-
-    public class BackPropagationQuadratic : IBackPropagation
+    public class BackPropagationCrossEntropy : IBackPropagation
     {
-        //const float smallDelta = 0.1f;
-
         [System.NonSerialized]
         bool initialized = false;
 
@@ -21,17 +18,50 @@ namespace SNN.Core
 
         #region IBackPropagation
         public void BackPropagate(LearningExample learningExample, INeuralNetAccessor outputGradient)
-        {           
+        {
             ComputeForward(learningExample.Input);
             ComputeBackward(learningExample, outputGradient);
         }
         #endregion
 
-        public BackPropagationQuadratic(NeuralNetAccessor neuralNetAccessor)
+        #region Initialization
+        public BackPropagationCrossEntropy(NeuralNetAccessor neuralNetAccessor)
         {
             this.neuralNetAccessor = neuralNetAccessor;
             Initialize();
         }
+
+        void Initialize()
+        {
+            if (initialized)
+            {
+                return;
+            }
+
+            // Initialize weightedInputs
+            weightedInputs = new List<float[]>(neuralNetAccessor.NumberOfLayer);
+            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
+            {
+                weightedInputs.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
+            }
+
+            // Initialize activations
+            activations = new List<float[]>(neuralNetAccessor.NumberOfLayer);
+            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
+            {
+                activations.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
+            }
+
+            // Initialize deltas
+            deltas = new List<float[]>(neuralNetAccessor.NumberOfLayer);
+            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
+            {
+                deltas.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
+            }
+
+            initialized = true;
+        } 
+        #endregion
 
         void ComputeForward(float[] input)
         {
@@ -107,55 +137,21 @@ namespace SNN.Core
                 outputGradient.BiasAccessor[layer, node] = sigmoidDash * error;
             }
         }
+
         void ComputeLastDeltas(float[] learningExampleOutput, INeuralNetAccessor outputGradient)
-        {
-            float sigmoidDash;
+        {            
             float deltaCa;
 
             int lastLayer = neuralNetAccessor.NumberOfLayer - 1;
-            int numberOfFinalNodes = neuralNetAccessor.NodesInLayer(lastLayer);
-            NeuralLayer lastNeuralLayer = neuralNetAccessor.GetNeuralLayer(lastLayer);
+            int numberOfFinalNodes = neuralNetAccessor.NodesInLayer(lastLayer);            
 
             for (int i = 0; i < numberOfFinalNodes; i++)
-            {
-                //sigmoidDash = lastNeuralLayer.GetNode(i).Compute(weightedInputs[lastLayer][i] + smallDelta) - activations[lastLayer][i];
-                sigmoidDash = activations[lastLayer][i];
-                sigmoidDash = sigmoidDash * (1 - sigmoidDash);
+            {              
                 deltaCa = activations[lastLayer][i] - learningExampleOutput[i];
-                outputGradient.BiasAccessor[lastLayer, i] = sigmoidDash * deltaCa;
+                outputGradient.BiasAccessor[lastLayer, i] =  deltaCa;
             }
         }
-
-        void Initialize()
-        {
-            if (initialized)
-            {
-                return;
-            }
-
-            // Initialize weightedInputs
-            weightedInputs = new List<float[]>(neuralNetAccessor.NumberOfLayer);
-            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
-            {
-                weightedInputs.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
-            }
-
-            // Initialize activations
-            activations = new List<float[]>(neuralNetAccessor.NumberOfLayer);
-            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
-            {
-                activations.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
-            }
-
-            // Initialize deltas
-            deltas = new List<float[]>(neuralNetAccessor.NumberOfLayer);
-            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
-            {
-                deltas.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
-            }
-
-            initialized = true;
-        }
+       
     }
 
 }

@@ -30,7 +30,8 @@ namespace SNN.Core
                     backPropagation = new BackPropagationQuadratic(neuralNetAccessor);
                     break;
                 case CostFuntionKind.CrossEntropy:
-                    throw new System.NotImplementedException();
+                    backPropagation = new BackPropagationCrossEntropy(neuralNetAccessor);
+                    break;
                 default:
                     throw new System.NotImplementedException();
             }

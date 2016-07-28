@@ -61,7 +61,7 @@ namespace SNN.Core
         {
             costFunctionGradient = new NeuralNetAccessor(neuralNetAccessor.InitializedParameters);
             backPropagationOutput = new NeuralNetAccessor(neuralNetAccessor.InitializedParameters);
-
+            InitializeBackPropagation();
             initializedLearning = true;
         }
 

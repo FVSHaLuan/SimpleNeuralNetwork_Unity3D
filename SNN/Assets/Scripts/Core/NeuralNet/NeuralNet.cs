@@ -45,8 +45,7 @@ namespace SNN.Core
             neuralNetAccessor = new NeuralNetAccessor(layersNodes);
 
             // Back propagation
-            this.costFunction = costFunction;
-            InitializeBackPropagation();
+            this.costFunction = costFunction;           
 
             //
             initialized = true;

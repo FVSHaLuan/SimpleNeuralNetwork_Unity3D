@@ -12,7 +12,7 @@ namespace SNN.Core
                 case NeuralNet.CostFuntionKind.Quadratic:
                     return QuadraticWholeCost(neuralNet, learningExamples);
                 case NeuralNet.CostFuntionKind.CrossEntropy:
-                    throw new System.NotImplementedException();
+                    return CrossEntropyWholeCost(neuralNet, learningExamples);
                 default:
                     throw new System.NotImplementedException();
             }
@@ -37,6 +37,32 @@ namespace SNN.Core
                 wholeCost += QuadraticSingleCost(learningExamples[i].Output, neuralNet.Compute(learningExamples[i].Input));
             }
             return wholeCost / learningExamples.Length;
+        }
+        #endregion
+
+        #region Cross Entropy     
+        static float CrossEntropySingleCost(float[] expectedOutput, float[] realOutput)
+        {
+            float singleCost = 0;
+            float n = expectedOutput.Length;
+
+            for (int i = 0; i < n; i++)
+            {
+                float y = expectedOutput[i];
+                float a = realOutput[i];
+                singleCost += y * Mathf.Log(a) + (1 - y) * Mathf.Log(1 - a);
+            }
+
+            return singleCost;
+        }
+        static float CrossEntropyWholeCost(NeuralNet neuralNet, LearningExample[] learningExamples)
+        {
+            float wholeCost = 0;
+            for (int i = 0; i < learningExamples.Length; i++)
+            {
+                wholeCost += CrossEntropySingleCost(learningExamples[i].Output, neuralNet.Compute(learningExamples[i].Input));
+            }
+            return -wholeCost / learningExamples.Length;
         }
         #endregion
     }
