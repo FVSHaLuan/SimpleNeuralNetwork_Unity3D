@@ -8,6 +8,8 @@ namespace SNN.Test
     public class NeuralNetSpawner : ScriptableObject
     {
         [SerializeField]
+        string fileName = "";
+        [SerializeField]
         NeuralNet.CostFuntionKind costFunction;
         [SerializeField]
         int[] layersNodes = new int[3] { 2, 2, 2 };
@@ -23,6 +25,7 @@ namespace SNN.Test
             {
                 current = CreateInstance<NeuralNetSpawner>();
             }
+            current.fileName = string.Format("New NeuralNet_{0}", System.DateTime.Now.Ticks);
             Selection.activeObject = current;
         }
 
@@ -31,7 +34,7 @@ namespace SNN.Test
         {
             NeuralNet neuralNet = CreateInstance<NeuralNet>();
             neuralNet.Initialize(costFunction, layersNodes);
-            string newAssetPath = string.Format("{0}/New NeuralNet_{1}.asset", AssetDatabase.GetAssetPath(path), System.DateTime.Now.Ticks);
+            string newAssetPath = string.Format("{0}/{1}.asset", AssetDatabase.GetAssetPath(path), fileName);
             AssetDatabase.CreateAsset(neuralNet, newAssetPath);
         }
     }

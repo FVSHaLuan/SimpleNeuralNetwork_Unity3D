@@ -31,6 +31,8 @@ namespace SNN.Train
         [ContextMenu("InitializeLearningExample")]
         void InitializeLearningExample()
         {
+            Undo.RecordObject(this, "InitializeLearningExample");
+
             int inputSize = neuralNet.InputSize;
             int outputSize = neuralNet.OutputSize;
 
@@ -43,12 +45,16 @@ namespace SNN.Train
         [ContextMenu("InitializeTestInput")]
         void InitializeTestInput()
         {
+            Undo.RecordObject(this, "InitializeTestInput");
+
             testInput = new float[neuralNet.InputSize];
         }
 
         [ContextMenu("ComputeCost")]
         void ComputeCost()
         {
+            Undo.RecordObject(this, "ComputeCost");
+
             Debug.Log(string.Format("Trainer {0}, cost = {1}", name, CostHelper.ComputeCost(neuralNet, learningExamples)));
         }
 
@@ -78,6 +84,8 @@ namespace SNN.Train
         [ContextMenu("Test")]
         void Test()
         {
+            Undo.RecordObject(this, "Test");
+
             computedOutput = neuralNet.Compute(testInput);
         }
     }
