@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using TestSimpleRNG;
 
 namespace SNN.Core
 {
@@ -45,10 +46,33 @@ namespace SNN.Core
             neuralNetAccessor = new NeuralNetAccessor(layersNodes);
 
             // Back propagation
-            this.costFunction = costFunction;           
+            this.costFunction = costFunction;
+
+            ///
+            InitializeWeightsAndBiases();
 
             //
             initialized = true;
+        }
+
+        [ContextMenu("Re-initialize weights and biases")]
+        public void InitializeWeightsAndBiases()
+        {
+            SimpleRNG.SetSeedFromSystemTime();
+
+            for (int layer = 0; layer < neuralNetAccessor.NumberOfLayer; layer++)
+            {
+                for (int node = 0; node < neuralNetAccessor.NodesInLayer(layer); node++)
+                {
+                    var sigmoid = neuralNetAccessor.GetSigmoid(layer, node);
+                    sigmoid.Bias = (float)SimpleRNG.GetNormal(0, 1);
+                    float standardDeviation = 1.0f / Mathf.Sqrt(sigmoid.Weights.Length);
+                    for (int i = 0; i < sigmoid.Weights.Length; i++)
+                    {
+                        sigmoid.Weights[i] = (float)SimpleRNG.GetNormal(0, standardDeviation);
+                    }
+                }
+            }
         }
 
         #region INeuralNet
