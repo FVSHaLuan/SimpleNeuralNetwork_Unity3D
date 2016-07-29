@@ -45,7 +45,7 @@ namespace SNN.Core
         public Sigmoid(int numberOfWeights)
         {
             this.numberOfWeights = numberOfWeights;
-            bias = Random.Range(-10, 10);
+            bias = 0;
             weights = InitializeWeights(numberOfWeights);
         }
 
@@ -82,7 +82,7 @@ namespace SNN.Core
             float[] weights = new float[numberOfWeights];
             for (int i = 0; i < numberOfWeights; i++)
             {
-                weights[i] = Random.Range(-10, 10);
+                weights[i] = 0;
             }
             return weights;
         }
