@@ -37,7 +37,7 @@ namespace SNN.Core
         {
             float[] currentInput = input;
 
-            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
+            for (int i = 0; i < neuralNetAccessor.NumberOfLayers; i++)
             {
                 neuralNetAccessor.GetNeuralLayer(i).GetWeightedInputs(currentInput, weightedInputs[i]);
                 neuralNetAccessor.GetNeuralLayer(i).ComputeWithWeightedInputs(weightedInputs[i], activations[i]);
@@ -47,7 +47,7 @@ namespace SNN.Core
 
         void ComputeBackward(LearningExample learningExample, INeuralNetAccessor outputGradient)
         {
-            int lastLayer = neuralNetAccessor.NumberOfLayer - 1;
+            int lastLayer = neuralNetAccessor.NumberOfLayers - 1;
             ComputeLastDeltas(learningExample.Output, outputGradient);
             ComputeWeightGradients(lastLayer, learningExample.Input, outputGradient);
             for (int layer = lastLayer - 1; layer >= 0; layer--)
@@ -112,7 +112,7 @@ namespace SNN.Core
             float sigmoidDash;
             float deltaCa;
 
-            int lastLayer = neuralNetAccessor.NumberOfLayer - 1;
+            int lastLayer = neuralNetAccessor.NumberOfLayers - 1;
             int numberOfFinalNodes = neuralNetAccessor.NodesInLayer(lastLayer);
             NeuralLayer lastNeuralLayer = neuralNetAccessor.GetNeuralLayer(lastLayer);
 
@@ -134,22 +134,22 @@ namespace SNN.Core
             }
 
             // Initialize weightedInputs
-            weightedInputs = new List<float[]>(neuralNetAccessor.NumberOfLayer);
-            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
+            weightedInputs = new List<float[]>(neuralNetAccessor.NumberOfLayers);
+            for (int i = 0; i < neuralNetAccessor.NumberOfLayers; i++)
             {
                 weightedInputs.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
             }
 
             // Initialize activations
-            activations = new List<float[]>(neuralNetAccessor.NumberOfLayer);
-            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
+            activations = new List<float[]>(neuralNetAccessor.NumberOfLayers);
+            for (int i = 0; i < neuralNetAccessor.NumberOfLayers; i++)
             {
                 activations.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
             }
 
             // Initialize deltas
-            deltas = new List<float[]>(neuralNetAccessor.NumberOfLayer);
-            for (int i = 0; i < neuralNetAccessor.NumberOfLayer; i++)
+            deltas = new List<float[]>(neuralNetAccessor.NumberOfLayers);
+            for (int i = 0; i < neuralNetAccessor.NumberOfLayers; i++)
             {
                 deltas.Add(new float[neuralNetAccessor.NodesInLayer(i)]);
             }

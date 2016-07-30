@@ -16,6 +16,10 @@ namespace SNN.Train
         [SerializeField]
         float learningRate = 0.01f;
         [SerializeField]
+        NeuralNet.RegularizationMethodKind regularizationMethod = NeuralNet.RegularizationMethodKind.L2;
+        [SerializeField]
+        float regularizationRate = 0.01f;
+        [SerializeField]
         int iterations = 100;
         [SerializeField]
         LearningExample[] learningExamples;
@@ -63,9 +67,11 @@ namespace SNN.Train
         {
             Undo.RecordObject(neuralNet, "Train");
 
+            neuralNet.RegularizationMethod = regularizationMethod;
+            neuralNet.RegularizationRate = regularizationRate;
+
             for (int i = 0; i < iterations; i++)
             {
-
                 if (!EditorUtility.DisplayCancelableProgressBar("Training...", string.Format("iteration = {0}/{1}", i + 1, iterations), (float)i / iterations))
                 {
                     neuralNet.Learn(learningExamples, learningRate);

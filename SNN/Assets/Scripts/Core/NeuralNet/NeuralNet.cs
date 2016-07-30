@@ -60,7 +60,7 @@ namespace SNN.Core
         {
             SimpleRNG.SetSeedFromSystemTime();
 
-            for (int layer = 0; layer < neuralNetAccessor.NumberOfLayer; layer++)
+            for (int layer = 0; layer < neuralNetAccessor.NumberOfLayers; layer++)
             {
                 for (int node = 0; node < neuralNetAccessor.NodesInLayer(layer); node++)
                 {

@@ -6,6 +6,7 @@ namespace SNN.Core
 {
     public partial class NeuralNet
     {
+
         [NonSerialized]
         BiasAccessor biasAccessor = null;
         [NonSerialized]
@@ -51,7 +52,7 @@ namespace SNN.Core
                 backPropagation.BackPropagate(learningExample[i], backPropagationOutput);
                 costFunctionGradient.AddAllBiasesAndWeightsWith(backPropagationOutput);
             }
-
+            AddRegularization(regularizationMethod, costFunctionGradient, RegularizationRate);
             costFunctionGradient.MultiplyAllBiasesAndWeightsWith(-1.0f / learningExample.Length * learningRate);
             neuralNetAccessor.AddAllBiasesAndWeightsWith(costFunctionGradient);
         }

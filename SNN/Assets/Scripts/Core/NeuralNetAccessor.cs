@@ -26,7 +26,7 @@ namespace SNN.Core
             }
         }
 
-        public int NumberOfLayer
+        public int NumberOfLayers
         {
             get
             {
@@ -120,7 +120,7 @@ namespace SNN.Core
 
         public void SetAllBiasesAndWeightsTo(float value)
         {
-            for (int layer = 0; layer < NumberOfLayer; layer++)
+            for (int layer = 0; layer < NumberOfLayers; layer++)
             {
                 for (int node = 0; node < NodesInLayer(layer); node++)
                 {
@@ -135,7 +135,7 @@ namespace SNN.Core
 
         public void MultiplyAllBiasesAndWeightsWith(float multiplier)
         {
-            for (int layer = 0; layer < NumberOfLayer; layer++)
+            for (int layer = 0; layer < NumberOfLayers; layer++)
             {
                 for (int node = 0; node < NodesInLayer(layer); node++)
                 {
@@ -150,7 +150,7 @@ namespace SNN.Core
 
         public void AddAllBiasesAndWeightsWith(INeuralNetAccessor otherNeuralNetAccessor)
         {
-            for (int layer = 0; layer < NumberOfLayer; layer++)
+            for (int layer = 0; layer < NumberOfLayers; layer++)
             {
                 for (int node = 0; node < NodesInLayer(layer); node++)
                 {
