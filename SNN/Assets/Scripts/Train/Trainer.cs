@@ -29,9 +29,7 @@ namespace SNN.Train
         float[] testInput;
         [SerializeField]
         float[] computedOutput;
-
-
-
+        
         [ContextMenu("InitializeLearningExample")]
         void InitializeLearningExample()
         {

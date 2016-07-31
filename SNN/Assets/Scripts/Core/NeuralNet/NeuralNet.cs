@@ -90,6 +90,15 @@ namespace SNN.Core
                 return outputSize;
             }
         }
+
+        public int NumberOfLayers
+        {
+            get
+            {
+                return neuralNetAccessor.NumberOfLayers;
+            }
+        }
+
         public float[] Compute(float[] input)
         {
             if (!initialized)
@@ -102,6 +111,16 @@ namespace SNN.Core
         public void Compute(float[] input, float[] output)
         {
             neuralNetAccessor.Compute(input, output);
+        }
+
+        public int NodesInLayer(int layer)
+        {
+            return neuralNetAccessor.NodesInLayer(layer);
+        }
+
+        public int WeightsOfNodeInLayer(int layer)
+        {
+            return neuralNetAccessor.WeightsOfNodeInLayer(layer);
         }
         #endregion
     }

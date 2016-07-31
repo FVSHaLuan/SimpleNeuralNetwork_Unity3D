@@ -7,26 +7,44 @@ namespace SNN.Core
     {
         public static float ComputeCost(NeuralNet neuralNet, LearningExample[] learningExamples)
         {
+            float cost = 0;
+
+            // C0
             switch (neuralNet.CostFunction)
             {
                 case NeuralNet.CostFuntionKind.Quadratic:
-                    return QuadraticWholeCost(neuralNet, learningExamples);
+                    cost = QuadraticWholeCost(neuralNet, learningExamples);
+                    break;
                 case NeuralNet.CostFuntionKind.CrossEntropy:
-                    return CrossEntropyWholeCost(neuralNet, learningExamples);
+                    cost = CrossEntropyWholeCost(neuralNet, learningExamples);
+                    break;
                 default:
                     throw new System.NotImplementedException();
             }
+
+            // Regularization
+            switch (neuralNet.RegularizationMethod)
+            {
+                case NeuralNet.RegularizationMethodKind.None:
+                    break;
+                case NeuralNet.RegularizationMethodKind.L2:
+                    cost += L2Cost(neuralNet, learningExamples.Length);
+                    break;
+                case NeuralNet.RegularizationMethodKind.L1:
+                    cost += L1Cost(neuralNet, learningExamples.Length);
+                    break;
+                default:
+                    throw new System.NotImplementedException();
+            }
+
+            //
+            return cost;
         }
 
         #region Quadratic
         static float QuadraticSingleCost(float[] expectedOutput, float[] realOutput)
         {
-            float singleCost = 0;
-            for (int i = 0; i < expectedOutput.Length; i++)
-            {
-                singleCost += Mathf.Pow(expectedOutput[i] - realOutput[i], 2);
-            }
-            return singleCost / 2.0f;
+            return SquareDistance(expectedOutput, realOutput) / 2.0f;
         }
 
         static float QuadraticWholeCost(NeuralNet neuralNet, LearningExample[] learningExamples)
@@ -37,6 +55,16 @@ namespace SNN.Core
                 wholeCost += QuadraticSingleCost(learningExamples[i].Output, neuralNet.Compute(learningExamples[i].Input));
             }
             return wholeCost / learningExamples.Length;
+        }
+
+        public static float SquareDistance(float[] x, float[] y)
+        {
+            float sd = 0;
+            for (int i = 0; i < x.Length; i++)
+            {
+                sd += Mathf.Pow(x[i] - y[i], 2);
+            }
+            return sd;
         }
         #endregion
 
@@ -60,9 +88,49 @@ namespace SNN.Core
             float wholeCost = 0;
             for (int i = 0; i < learningExamples.Length; i++)
             {
-                wholeCost += CrossEntropySingleCost(learningExamples[i].Output, neuralNet.Compute(learningExamples[i].Input));
+
+                float singleCost = CrossEntropySingleCost(learningExamples[i].Output, neuralNet.Compute(learningExamples[i].Input));
+                wholeCost += singleCost;
             }
             return -wholeCost / learningExamples.Length;
+        }
+        #endregion
+
+        #region Regularization
+        static float L2Cost(NeuralNet neuralNet, int numberOfTests)
+        {
+            float l2Cost = 0;
+
+            for (int layer = 0; layer < neuralNet.NumberOfLayers; layer++)
+            {
+                for (int node = 0; node < neuralNet.NodesInLayer(layer); node++)
+                {
+                    for (int weight = 0; weight < neuralNet.WeightsOfNodeInLayer(layer); weight++)
+                    {
+                        l2Cost += Mathf.Pow(neuralNet.WeightAccessor[layer, node, weight], 2);
+                    }
+                }
+            }
+
+            return l2Cost * neuralNet.RegularizationRate / 2.0f / numberOfTests;
+        }
+
+        static float L1Cost(NeuralNet neuralNet, int numberOfTests)
+        {
+            float l1Cost = 0;
+
+            for (int layer = 0; layer < neuralNet.NumberOfLayers; layer++)
+            {
+                for (int node = 0; node < neuralNet.NodesInLayer(layer); node++)
+                {
+                    for (int weight = 0; weight < neuralNet.WeightsOfNodeInLayer(layer); weight++)
+                    {
+                        l1Cost += Mathf.Abs(neuralNet.WeightAccessor[layer, node, weight]);
+                    }
+                }
+            }
+
+            return l1Cost * neuralNet.RegularizationRate / numberOfTests;
         }
         #endregion
     }
